@@ -1,13 +1,19 @@
 import Functions
 import PySimpleGUI as sg
 import time
+import os
+
+if not os.path.exists("todo_list.txt"):
+    with open("todo_list.txt", 'w') as file:
+        pass
 
 sg.theme("DarkTeal")
-
+font_style1 = 'Lucida Console'
+font_style2 = 'Copperplate Gothic Light'
 # Creating components for window
 date = sg.Text('', key='date')
 label = sg.Text("Add or modify a todo item here:")
-input_box = sg.InputText(tooltip="Enter our todo item here", key='todo')
+input_box = sg.InputText(tooltip="Enter your todo item here", key='todo')
 add_button = sg.Button("Add")
 todo_list_box = sg.Listbox(values=Functions.get_todo_list(), key='todo_items',
                            enable_events=True, size=[45, 10])
@@ -17,15 +23,14 @@ exit_button = sg.Button("Exit")
 
 # Creating window and displaying it
 window = sg.Window('My To-Do App',
-                   layout=[[date],
+                   layout=[
                    [label],
                    [input_box, add_button],
                    [todo_list_box, edit_button, complete_button],
-                   [exit_button]],
-                   font=('Helvetica', 20))
+                   [exit_button, date]])
 
 while True:
-    event, values = window.read(timeout=800)
+    event, values = window.read(timeout=100)
     window['date'].update(value=time.strftime("%b/%d/%Y"))
     match event:
         # Creation of add feature
